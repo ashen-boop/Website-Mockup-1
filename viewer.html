@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Viewer · Website Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            padding: 14px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .top-bar .brand {
+            color: #1e1e1e;
+            font-weight: 400;
+            font-size: 1.3rem;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .top-bar .brand i {
+            font-weight: 300;
+            color: #888;
+            font-size: 1.2rem;
+        }
+        .top-bar .brand span {
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e1e1e, #555);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .top-bar .close {
+            color: #1e1e1e;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 8px 20px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 40px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            font-weight: 500;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+            font-family: 'Inter', sans-serif;
+        }
+        .top-bar .close:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+            transform: translateY(-1px);
+        }
+        .top-bar .close:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== BUTTON BAR ===== */
+        .button-bar {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            padding: 10px 18px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            border-radius: 60px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0f0f0;
+            max-width: 92%;
+            flex-wrap: nowrap;
+        }
+        .button-bar.show {
+            display: flex;
+        }
+
+        /* ===== THREE STYLE BUTTONS ===== */
+        .style-btn {
+            padding: 8px 22px;
+            border-radius: 40px;
+            border: 2px solid transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            background: transparent;
+            color: #888;
+            border-color: #e8e8e8;
+        }
+
+        .style-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .style-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Minimalistic - Clean grey/white */
+        .style-btn.minimalistic {
+            color: #555;
+            border-color: #d0d0d0;
+            background: #f8f8f8;
+        }
+        .style-btn.minimalistic:hover {
+            background: #eeeeee;
+            border-color: #bbb;
+        }
+        .style-btn.minimalistic.active {
+            background: #2c2c2c;
+            border-color: #2c2c2c;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(44, 44, 44, 0.15);
+        }
+        .style-btn.minimalistic .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #888;
+            margin-right: 2px;
+        }
+        .style-btn.minimalistic.active .dot {
+            background: #ffffff;
+        }
+
+        /* Fancy - Warm orange/gold */
+        .style-btn.fancy {
+            color: #b85a1a;
+            border-color: #f0d5b8;
+            background: #fdf6f0;
+        }
+        .style-btn.fancy:hover {
+            background: #fceee3;
+            border-color: #e8c4a0;
+        }
+        .style-btn.fancy.active {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.25);
+        }
+        .style-btn.fancy .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e67e22;
+            margin-right: 2px;
+        }
+        .style-btn.fancy.active .dot {
+            background: #ffffff;
+        }
+
+        /* Blended - Green/teal */
+        .style-btn.blended {
+            color: #1a7a5a;
+            border-color: #b8d5c8;
+            background: #f0f8f4;
+        }
+        .style-btn.blended:hover {
+            background: #e3f3ea;
+            border-color: #90c0a8;
+        }
+        .style-btn.blended.active {
+            background: #1a8a5a;
+            border-color: #1a8a5a;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(26, 138, 90, 0.25);
+        }
+        .style-btn.blended .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #1a8a5a;
+            margin-right: 2px;
+        }
+        .style-btn.blended.active .dot {
+            background: #ffffff;
+        }
+
+        /* Button divider */
+        .btn-divider {
+            width: 1px;
+            height: 28px;
+            background: #e8e8e8;
+            flex-shrink: 0;
+        }
+
+        /* Current style indicator text */
+        .current-style-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-right: 4px;
+        }
+
+        /* ===== IFRAME WRAPPER ===== */
+        .iframe-wrap {
+            position: fixed;
+            top: 100px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: calc(100vh - 100px);
+            background: #fafafa;
+        }
+        .iframe-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            -webkit-overflow-scrolling: touch;
+            overflow: auto;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            transition: opacity 0.6s ease;
+        }
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2.5px solid #f0f0f0;
+            border-top-color: #1e1e1e;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: rgba(0, 0, 0, 0.3);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .top-bar { height: 54px; padding: 10px 18px; }
+            .top-bar .brand { font-size: 1rem; }
+            .top-bar .close { 
+                font-size: 0.75rem; 
+                padding: 6px 14px;
+                gap: 4px;
+            }
+            .button-bar { 
+                top: 66px;
+                padding: 8px 14px;
+                gap: 8px;
+                border-radius: 40px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+            }
+            .button-bar::-webkit-scrollbar {
+                height: 0;
+            }
+            .style-btn {
+                padding: 6px 16px;
+                font-size: 0.7rem;
+                flex-shrink: 0;
+            }
+            .btn-divider { height: 22px; }
+            .current-style-label { font-size: 0.55rem; }
+            .iframe-wrap { top: 112px; height: calc(100vh - 112px); }
+        }
+
+        @media (max-width: 480px) {
+            .top-bar { height: 48px; padding: 8px 14px; }
+            .top-bar .brand { font-size: 0.85rem; }
+            .top-bar .close { 
+                font-size: 0.65rem; 
+                padding: 5px 12px;
+                gap: 3px;
+            }
+            .button-bar { 
+                top: 58px;
+                padding: 6px 10px;
+                gap: 6px;
+                border-radius: 30px;
+            }
+            .style-btn {
+                padding: 5px 12px;
+                font-size: 0.6rem;
+                gap: 4px;
+            }
+            .style-btn .dot { width: 6px; height: 6px; }
+            .btn-divider { height: 18px; }
+            .current-style-label { display: none; }
+            .iframe-wrap { top: 98px; height: calc(100vh - 98px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading your experience...</div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <a href="#" class="brand" onclick="window.location.href='/'">
+            <i class="fas fa-window-maximize"></i>
+            mockup·<span>flow</span>
+        </a>
+        <button class="close" onclick="window.close();">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+
+    <!-- BUTTON BAR - Three distinct colored buttons -->
+    <div class="button-bar" id="buttonBar">
+        <span class="current-style-label">Viewing</span>
+        
+        <!-- Minimalistic Button -->
+        <button class="style-btn minimalistic active" id="btnMinimalistic" onclick="goToStyle('minimalistic')">
+            <span class="dot"></span> Minimalistic
+        </button>
+        
+        <span class="btn-divider"></span>
+        
+        <!-- Fancy Button -->
+        <button class="style-btn fancy" id="btnFancy" onclick="goToStyle('fancy')">
+            <span class="dot"></span> Fancy
+        </button>
+        
+        <span class="btn-divider"></span>
+        
+        <!-- Blended Button -->
+        <button class="style-btn blended" id="btnBlended" onclick="goToStyle('blended')">
+            <span class="dot"></span> Blended
+        </button>
+    </div>
+
+    <!-- IFRAME -->
+    <div class="iframe-wrap">
+        <iframe id="frame" src=""></iframe>
+    </div>
+
+    <script>
+        // ============================================
+        // YOUR THREE WEBSITE MOCKUPS - PASTE URLs HERE
+        // ============================================
+        const websites = {
+            'minimalistic': {
+                name: 'Minimalistic',
+                url: 'https://ashen-boop.github.io/Brochure-THEME-SWITCH-/'
+            },
+            'fancy': {
+                name: 'Fancy',
+                url: 'https://ashen-boop.github.io/Brochure-Artistic-updated-2/'
+            },
+            'blended': {
+                name: 'Blended',
+                url: 'https://ashen-boop.github.io/Landing-page---Minimalistic-1/'
+            }
+        };
+
+        // ============================================
+        // GET URL PARAMETERS
+        // ============================================
+        function getParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentStyle = 'minimalistic';
+
+        // ============================================
+        // DOM REFS
+        // ============================================
+        const frame = document.getElementById('frame');
+        const btnMinimalistic = document.getElementById('btnMinimalistic');
+        const btnFancy = document.getElementById('btnFancy');
+        const btnBlended = document.getElementById('btnBlended');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const buttonBar = document.getElementById('buttonBar');
+
+        // ============================================
+        // FUNCTIONS
+        // ============================================
+        function loadStyle(styleKey) {
+            const website = websites[styleKey];
+            if (!website) {
+                console.error('Website not found:', styleKey);
+                return;
+            }
+
+            currentStyle = styleKey;
+            
+            // Update UI - Show loading
+            loadingOverlay.classList.remove('hidden');
+
+            // Update button states
+            btnMinimalistic.classList.toggle('active', styleKey === 'minimalistic');
+            btnFancy.classList.toggle('active', styleKey === 'fancy');
+            btnBlended.classList.toggle('active', styleKey === 'blended');
+
+            // Load iframe
+            frame.src = website.url;
+            frame.onload = function() {
+                loadingOverlay.classList.add('hidden');
+            };
+            
+            // Fallback timeout
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+            }, 2000);
+        }
+
+        function goToStyle(styleKey) {
+            if (styleKey !== currentStyle) {
+                loadStyle(styleKey);
+            }
+        }
+
+        // ============================================
+        // LOAD ON START
+        // ============================================
+        function loadContent() {
+            const style = getParam('style') || 'minimalistic';
+            
+            // Show the button bar
+            buttonBar.classList.add('show');
+            
+            // Load the requested style or default to minimalistic
+            if (websites[style]) {
+                loadStyle(style);
+            } else {
+                loadStyle('minimalistic');
+            }
+            
+            console.log('✨ Website Viewer loaded!');
+            console.log('📱 Current style:', style);
+            console.log('🎨 Click Minimalistic, Fancy, or Blended to switch');
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+
+            // Keyboard shortcuts: 1, 2, 3
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '1') goToStyle('minimalistic');
+                else if (e.key === '2') goToStyle('fancy');
+                else if (e.key === '3') goToStyle('blended');
+            });
+
+            console.log('⌨️  Keyboard shortcuts: 1=Minimalistic, 2=Fancy, 3=Blended');
+        });
+    </script>
+
+</body>
+</html>
